@@ -1,0 +1,62 @@
+package com.mycompany.aplicacioncliente.main.analizadoresconsultas;
+
+import java_cup.runtime.*;
+
+parser code {:
+
+    private Symbol symbol;
+    private String contenido;
+
+    public SintacticoConsultas(LexicoConsultas lexico) {
+        super(lexico);
+    }
+
+    public void syntax_error(Symbol cur_token) {
+        symbol = cur_token;
+        contenido = (String)(cur_token.value);
+    }
+
+    public Symbol getSymbol() {
+        return this.symbol;
+    }
+
+    public String getContenido() {
+        return this.contenido;
+    }
+:}
+
+/* Terminales */
+terminal            CONSULTAR, VISITAS_SITIO, VISITAS_PAGINA, PAGINAS_POPULARES, COMPONENTE, COMILLA, COMA, PUNTO, PUNTO_Y_COMA, TODOS, TITULO, PARRAFO, IMAGEN, VIDEO, MENU; 
+terminal String     PALABRA;
+
+/* No Terminales */
+non terminal        inicio, componente, id1, id2, id3;
+
+/* Gramatica */
+start with inicio;
+
+inicio ::= CONSULTAR VISITAS_SITIO id1
+        | CONSULTAR VISITAS_PAGINA id2
+        | CONSULTAR PAGINAS_POPULARES id3
+        | CONSULTAR COMPONENTE componente
+        ;
+
+componente ::= TODOS id2
+        | TITULO id2
+        | PARRAFO id2
+        | IMAGEN id2
+        | VIDEO id2
+        | MENU id2
+        ;
+
+id1 ::= COMILLA PALABRA COMILLA COMA id1
+        | COMILLA PALABRA COMILLA PUNTO_Y_COMA
+        ;
+
+id2 ::= COMILLA PALABRA PUNTO PALABRA COMILLA COMA id2
+        | COMILLA PALABRA PUNTO PALABRA COMILLA PUNTO_Y_COMA
+        ;
+
+id3 ::= COMILLA PALABRA COMILLA PUNTO_Y_COMA
+        ;
+ 
